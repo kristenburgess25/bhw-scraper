@@ -21,21 +21,28 @@
           const eventLocation = $(rowData).last().text()
      
         
-        //   const detailUrl = `https://barrelhorseworld.com/${detailLink}`
+          const detailUrl = `https://barrelhorseworld.com/${detailLink}`
 
-        const detailUrl =  'https://barrelhorseworld.com/eventdetail.asp?ID=126020'
+        // const detailUrl =  'https://barrelhorseworld.com/eventdetail.asp?ID=126020'
 
           axios(detailUrl)
             .then(response => {
                 const html = response.data;
                 const $ = cheerio.load(html)
                 const detailsTable = $('tbody > tr');
-                const rightColText = $(detailsTable).find('.text-right').text()
-                // if(rightColText == 'When') {
-                //     let sibling 
-                //     console.log
-                // }
-                // console.log('TEXT RIGHT', rightCol)
+
+                detailsTable.each(function() {
+                    const rightColText = $(this).find('.text-right').text()
+                    const siblings = $(this).find('.text-right').siblings().text()
+                    // console.log('descriptor', rightColText, 'SIBLINGS', siblings)
+
+                    if(rightColText === 'Description') {
+                        console.log('right col sibling', siblings)
+                    }
+                })
+
+                
+
             })
 
           events.push({
@@ -46,6 +53,6 @@
           });
         });
 
-        console.log(events);
+        // console.log(events);
       })
       .catch(console.error);
