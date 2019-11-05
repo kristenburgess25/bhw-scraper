@@ -1,29 +1,29 @@
     const axios = require('axios');
     const cheerio = require('cheerio');
 
-    const url = 'https://www.premierleague.com/stats/top/players/goals?se=-1&cl=-1&iso=-1&po=-1?se=-1';
+    const url = 'https://barrelhorseworld.com/events.asp';
 
     axios(url)
       .then(response => {
         const html = response.data;
         const $ = cheerio.load(html)
-        const statsTable = $('.statsTableContainer > tr');
-        const topPremierLeagueScorers = [];
+        const eventsTable = $('tbody > tr');
+        const events = [];
 
-        statsTable.each(function () {
-          const rank = $(this).find('.rank > strong').text();
-          const playerName = $(this).find('.playerName > strong').text();
-          const nationality = $(this).find('.playerCountry').text();
-          const goals = $(this).find('.mainStat').text();
 
-          topPremierLeagueScorers.push({
-            rank,
-            name: playerName,
-            nationality,
-            goals,
+        eventsTable.each(function () {
+
+          const rowData = $(this).find('td');
+          const Info = rowData.text()
+          const eventTitle = $(rowData).find('a').text()
+          const detailLink = $(rowData).find('a').attr('href')
+
+          events.push({
+            title: eventTitle,
+            link: detailLink
           });
         });
 
-        console.log(topPremierLeagueScorers);
+        console.log(events);
       })
       .catch(console.error);
