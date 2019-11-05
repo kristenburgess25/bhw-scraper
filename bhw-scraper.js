@@ -29,16 +29,25 @@
             .then(response => {
                 const html = response.data;
                 const $ = cheerio.load(html)
-                const detailsTable = $('tbody > tr');
+                const detailsTable = $('tbody > tr')
 
                 detailsTable.each(function() {
+                    const details = {
+                        description: '',
+                        contact: '',
+                        phone: ''
+                    }
+
                     const rightColText = $(this).find('.text-right').text()
                     const siblings = $(this).find('.text-right').siblings().text()
                     // console.log('descriptor', rightColText, 'SIBLINGS', siblings)
 
                     if(rightColText === 'Description') {
-                        console.log('right col sibling', siblings)
+                        // console.log('right col sibling', siblings)
+                        details.description = siblings
                     }
+                    console.log('DETAILS', details)
+                    
                 })
 
                 
@@ -49,7 +58,8 @@
             title: eventTitle,
             date: eventDate,
             location: eventLocation,
-            link: detailLink
+            link: detailUrl,
+            details: {}
           });
         });
 
