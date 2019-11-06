@@ -26,17 +26,17 @@
         
           const detailUrl = `https://barrelhorseworld.com/${detailLink}`
 
-
-          events.push({
+          const event = {
             title: eventTitle,
             date: eventDate,
             location: eventLocation,
             link: detailUrl
-          });
+          }
+          getDetails(event);
 
         //   console.log(events)
         });
-        getDetails(events[5])
+        // getDetails(events[5])
       })
       .catch(console.error);
     
@@ -94,30 +94,32 @@
   
   
                 if(rightColText === 'Description') {
-                    console.log('right col sibling', siblings)
+                    // console.log('right col sibling', siblings)
                     details.description = siblings
                 }
   
                 if(rightColText === 'Contact') {
-                    console.log('right col sibling', siblings)
+                    // console.log('right col sibling', siblings)
                     details.contact = siblings
                 }
                 // console.log('all events', events)
             })
-            console.log('THE EVENT', event)
-            console.log('details', details)
+            // console.log('THE EVENT', event)
+            // console.log('details', details)
             const mergedData = {...event, ...details}
-            console.log('MERGED DATA', mergedData)
-            
+            // console.log('MERGED DATA', mergedData)
+            events.push(mergedData)
         })
-        
+        // .catch(console.error);
+
         // fullData.push({
 
         // })
     }
 
-    function updateEvent(event) {
-        console.log('full event')
-    }
+
+    // function updateEvent() {
+    //     console.log('ALL EVENTS', events)
+    // }
 
 
