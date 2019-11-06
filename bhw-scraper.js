@@ -2,23 +2,25 @@
     const cheerio = require('cheerio');
 
     const url = 'https://barrelhorseworld.com/events.asp';
+    const events = []
+    const details = {}
 
     axios(url)
       .then(response => {
         const html = response.data;
         const $ = cheerio.load(html)
         const eventsTable = $('tbody > tr');
-        const events = [];
 
 
         eventsTable.each(function () {
-
+        
           const rowData = $(this).find('td');
           const Info = rowData.text()
           const eventTitle = $(rowData).find('a').text()
           const detailLink = $(rowData).find('a').attr('href')
           const eventDate = $(rowData).first().text()
           const eventLocation = $(rowData).last().text()
+          const eventDetails = ''
      
         
           const detailUrl = `https://barrelhorseworld.com/${detailLink}`
@@ -42,24 +44,30 @@
                     const siblings = $(this).find('.text-right').siblings().text()
                     // console.log('descriptor', rightColText, 'SIBLINGS', siblings)
 
+
                     if(rightColText === 'Description') {
                         // console.log('right col sibling', siblings)
                         details.description = siblings
                     }
-                    console.log('DETAILS', details)
+
+                    if(rightColText === 'Contact') {
+                        // console.log('right col sibling', siblings)
+                        details.contact = siblings
+                    }
+
+                    // eventDetails = details 
                     
+                    // console.log('DETAIL OBJ', eventDetails)
+                    console.log('DETAILS', details)
+
                 })
-
-                
-
             })
 
           events.push({
             title: eventTitle,
             date: eventDate,
             location: eventLocation,
-            link: detailUrl,
-            details: {}
+            link: detailUrl
           });
         });
 
