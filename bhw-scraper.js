@@ -3,29 +3,28 @@
 
     const url = 'https://barrelhorseworld.com/events.asp';
     const events = []
-    const details = {}
 
     axios(url)
       .then(response => {
         const html = response.data;
         const $ = cheerio.load(html)
         const eventsTable = $('tbody > tr');
-
+        
 
         eventsTable.each(function () {
         
           const rowData = $(this).find('td');
-          const Info = rowData.text()
-          const eventTitle = $(rowData).find('a').text()
+        //   const Info = rowData.text()
+        //   const eventTitle = $(rowData).find('a').text()
           const detailLink = $(rowData).find('a').attr('href')
-          const eventDate = $(rowData).first().text()
-          const eventLocation = $(rowData).last().text()
-          const eventDetails = ''
+        //   const eventDate = $(rowData).first().text()
+        //   const eventLocation = $(rowData).last().text()
+        //   const eventDetails = ''
+          
      
         
           const detailUrl = `https://barrelhorseworld.com/${detailLink}`
 
-        // const detailUrl =  'https://barrelhorseworld.com/eventdetail.asp?ID=126020'
 
           axios(detailUrl)
             .then(response => {
@@ -34,7 +33,10 @@
                 const detailsTable = $('tbody > tr')
 
                 detailsTable.each(function() {
-                    const details = {
+                    const event = {
+                        name: '',
+                        date: '',
+                        location: '',
                         description: '',
                         contact: '',
                         phone: ''
@@ -47,30 +49,32 @@
 
                     if(rightColText === 'Description') {
                         // console.log('right col sibling', siblings)
-                        details.description = siblings
+                        event.description = siblings
                     }
 
                     if(rightColText === 'Contact') {
                         // console.log('right col sibling', siblings)
-                        details.contact = siblings
+                        event.contact = siblings
                     }
 
-                    // eventDetails = details 
+                    
                     
                     // console.log('DETAIL OBJ', eventDetails)
-                    console.log('DETAILS', details)
-
+                    // console.log('DETAILS', event)
+                    events.push(event)
+                    
                 })
+                
             })
 
-          events.push({
-            title: eventTitle,
-            date: eventDate,
-            location: eventLocation,
-            link: detailUrl
-          });
+        //   events.push({
+        //     title: eventTitle,
+        //     date: eventDate,
+        //     location: eventLocation,
+        //     link: detailUrl
+        //   });
         });
 
-        // console.log(events);
+        
       })
       .catch(console.error);
